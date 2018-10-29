@@ -1,107 +1,87 @@
-//Billy Kelly
+//Billy kelly
 //Sprite
+//10.17.2018
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
+import java.awt.image.*;
 import java.awt.geom.*;
 
 public class Sprite
 {
-	private Spritesheet ss;
-	private int x, y;
-	private int width, height;
+    //GLOBAL VARIABLES
+    private Spritesheet ss;
+    private AffineTransform at;
+    private int x, y;
+    private String name;
 
-	private AffineTransform tx;
-	private double scaleX, scaleY;
-
-	//-----------------------------------------<CONSTRUCTORS>-----------------------------------
-	public Sprite(BufferedImage b, int rows, int cols, int x, int y, int width, int height)
-	{
-		ss = new Spritesheet(b, rows, cols);
-		this.x = x;
-		this.y = y;
-		this.width = width;
-		this.height = height;
-		scaleX = (double)width / (double)ss.getCurrentImage().getWidth();
-		scaleY = (double)height / (double)ss.getCurrentImage().getHeight();
-
-		tx = new AffineTransform();
-		tx.scale(scaleX, scaleY);
-	}
-
-	public Sprite(Spritesheet s, int x, int y, int width, int height)
-	{
+    //----------------------------------------------<CONSTRUCTORS>----------------------------------------
+    public Sprite(String name, Spritesheet s)
+    {
+		this.name = name;
 		ss = s;
-		this.x = x;
-		this.y = y;
-		this.width = width;
-		this.height = height;
-		scaleX = (double)width / (double)ss.getCurrentImage().getWidth();
-		scaleY = (double)height / (double)ss.getCurrentImage().getHeight();
+        at = new AffineTransform();
+    }
 
-		tx = new AffineTransform();
-		tx.scale(scaleX, scaleY);
+    public Sprite(String name, BufferedImage bi, int rows, int cols)
+    {
+		ss = new Spritesheet(bi, rows, cols);
+		this.name = name;
+		at = new AffineTransform();
 	}
 
-	public Sprite(Spritesheet s, Box b)
-	{
-		ss = s;
-		x = b.getX();
-		y = b.getY();
-		width = b.getWidth();
-		height = b.getHeight();
+    //------------------------------------------------<DRAWING>---------------------------------------
+    public void draw(Graphics g, int width, int height)
+    {
+        Graphics2D g2d = (Graphics2D)g;
+        g2d.transform(at);
+        g2d.drawImage(ss.animateWithImage(), x, y, width, height, null);
+    }
 
-		scaleX = (double)width / (double)ss.getCurrentImage().getWidth();
-		scaleY = (double)height / (double)ss.getCurrentImage().getHeight();
-
-		tx = new AffineTransform();
-		tx.scale(scaleX, scaleY);
+    //---------------------------------------------<IMAGE EDITORS>-------------------------------------
+    public void scaleTo(int width, int height)
+    {
+        AffineTransform at = new AffineTransform();
+        at.scale((double)(width / ss.getCurrentImage().getWidth()), (double)(height / ss.getCurrentImage().getHeight()));
+        this.at = at;
 	}
 
-	//-----------------------------------------<DRAW AND ANIMATE>---------------------------------------
-	public void draw(Graphics g)
-	{
-		Graphics2D g2d = (Graphics2D) g;
-		g2d.transform(tx);
-		g2d.drawImage(ss.getCurrentImage(), x, y, null);
-		System.out.println(x + ", " + y);
-	}
+    //--------------------------------------------<ANIMATION EDITORS>---------------------------------
+    public void changeAnimation(int row)
+    {ss.setRow(row);}
 
-	public void animate()
-	{ss.animate();}
+    public void animate()
+    {ss.animate();}
 
-	public void switchAnimation(int row)
-	{ss.setRow(row);}
+    //----------------------------------------------------<MOVERS>-----------------------------------------
+    public void moveToX(int x)
+    {this.x = x;}
 
-	public void switchAnimation()
-	{ss.setRow(ss.getRow() + 1);}
+    public void moveToY(int y)
+    {this.y = y;}
 
-	public void switchBackAnimation()
-	{ss.setRow(ss.getRow() - 1);}
+    public void moveTo(int x, int y)
+    {this.x = x; this.y = y;}
 
-	//---------------------------------------------<GETTERS>-----------------------------------------
-	public Spritesheet getSpritesheet()
-	{return ss;}
+    //----------------------------------------------<GETTERS>-----------------------------------------------------
+    public Spritesheet getSpritesheet()
+    {return ss;}
 
-	public int getX()
-	{return x;}
+    public AffineTransform getAffineTransform()
+    {return at;}
 
-	public int getY()
-	{return y;}
+    public int getX()
+    {return x;}
 
-	public int getWidth()
-	{return width;}
+    public int getY()
+    {return y;}
 
-	public int getHeight()
-	{return height;}
+    public String getName()
+    {return name;}
 
-	//---------------------------------------------<SETTERS>-------------------------------------------
-	public void setX(int newX)
-	{x = newX;}
+    //------------------------------------------------<SETTERS>---------------------------------------------------
+    public void setX(int x)
+    {this.x = x;}
 
-	public void setY(int newY)
-	{y = newY;}
-
-	//public void setWidth(int newWidth)
-	//{
+    public void setY(int y)
+    {this.y = y;}
 }
