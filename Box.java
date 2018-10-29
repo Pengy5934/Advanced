@@ -3,16 +3,26 @@
 //Box Class
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
+import java.awt.image.*;
+import java.util.*;
+import java.awt.geom.*;
 
 public class Box
 {
+  //Variables for box
 	private Color color = null;
 	private int x;
 	private int y;
 	private int width;
 	private int height;
-	private BufferedImage img = null;
+
+	//Arrays of objects to draw
+	private ArrayList<BufferedImage> images = new ArrayList<BufferedImage>();
+	private ArrayList<Shape> shapes = new ArrayList<Shape>();
+
+	//Variables for scaling images
+	private AffineTransform tx;
+	private double scaleX = 1.0, scaleY = 1.0;
 
 	public Box(int x, int y, int width, int height, Color c)
 	{
@@ -29,8 +39,13 @@ public class Box
 		this.y = y;
 		this.width = width;
 		this.height = height;
-		this.img = img;
+		images.add(img);
+
+		tx = new AffineTransform();
+		tx.scale(scaleX, scaleY);
 	}
+
+	//--------------------------------------------<DRAW>--------------------------------------
 
 	public void draw(Graphics g)
 	{
@@ -41,10 +56,14 @@ public class Box
 			g.fillRect(x, y, width, height);
 			g.setColor(temp);
 		}
-		else if (img != null)
-		{
-			g.drawImage(img, x, y, null);
-		}
+
+    	Graphics2D g2d = (Graphics2D)g;
+
+		for (Image i : images)
+			g2d.drawImage(i, x, y, null);
+
+		for (Shape s : shapes)
+			g2d.draw(s);
 	}//end draw
 
 	public boolean checkInBounds(int x, int y)
@@ -63,6 +82,13 @@ public class Box
 		return false;
 	}
 
+	//---------------------------------<Adders for Images and Shapes>------------------------
+	public void addImage(BufferedImage i)
+	{images.add(i);}
+
+	public void addShape(Shape s)
+	{shapes.add(s);}
+
 	//--------------------------<Setters for x, y, width, height, and color>-------------------------------
 	public void setX(int x)
 	{this.x = x;}
@@ -78,9 +104,6 @@ public class Box
 
 	public void setColor(Color c)
 	{color = c;}
-
-	public void setImage(BufferedImage img)
-	{this.img = img;}
 
 	//---------------------------<Getters for x, y, width, height, and color>----------------------------------
 	public int getX()
@@ -98,7 +121,7 @@ public class Box
 	public Color getColor()
 	{return color;}
 
-	public BufferedImage getImage()
-	{return img;}
+	public BufferedImage getImage(int index)
+	{return images.get(index);}
 
 }//end Class

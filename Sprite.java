@@ -3,6 +3,7 @@
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.geom.*;
 
 public class Sprite
 {
@@ -10,6 +11,10 @@ public class Sprite
 	private int x, y;
 	private int width, height;
 
+	private AffineTransform tx;
+	private double scaleX, scaleY;
+
+	//-----------------------------------------<CONSTRUCTORS>-----------------------------------
 	public Sprite(BufferedImage b, int rows, int cols, int x, int y, int width, int height)
 	{
 		ss = new Spritesheet(b, rows, cols);
@@ -17,6 +22,11 @@ public class Sprite
 		this.y = y;
 		this.width = width;
 		this.height = height;
+		scaleX = (double)width / (double)ss.getCurrentImage().getWidth();
+		scaleY = (double)height / (double)ss.getCurrentImage().getHeight();
+
+		tx = new AffineTransform();
+		tx.scale(scaleX, scaleY);
 	}
 
 	public Sprite(Spritesheet s, int x, int y, int width, int height)
@@ -26,11 +36,35 @@ public class Sprite
 		this.y = y;
 		this.width = width;
 		this.height = height;
+		scaleX = (double)width / (double)ss.getCurrentImage().getWidth();
+		scaleY = (double)height / (double)ss.getCurrentImage().getHeight();
+
+		tx = new AffineTransform();
+		tx.scale(scaleX, scaleY);
 	}
 
+	public Sprite(Spritesheet s, Box b)
+	{
+		ss = s;
+		x = b.getX();
+		y = b.getY();
+		width = b.getWidth();
+		height = b.getHeight();
+
+		scaleX = (double)width / (double)ss.getCurrentImage().getWidth();
+		scaleY = (double)height / (double)ss.getCurrentImage().getHeight();
+
+		tx = new AffineTransform();
+		tx.scale(scaleX, scaleY);
+	}
+
+	//-----------------------------------------<DRAW AND ANIMATE>---------------------------------------
 	public void draw(Graphics g)
 	{
-		g.drawImage(ss.getCurrentImage(), x, y, null);
+		Graphics2D g2d = (Graphics2D) g;
+		g2d.transform(tx);
+		g2d.drawImage(ss.getCurrentImage(), x, y, null);
+		System.out.println(x + ", " + y);
 	}
 
 	public void animate()
