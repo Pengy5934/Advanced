@@ -9,3 +9,6 @@ Project 2:
 
 Project 3:
   Put the sprite in the grid in a GriddedSprite class
+
+Project 4:
+  Form the grid into a maze, with walls and end/start boxes. Each box should hold a background image.
