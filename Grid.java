@@ -4,6 +4,7 @@
 
 import java.awt.*;
 import java.awt.image.*;
+import java.util.*;
 
 public class Grid
 {
@@ -111,6 +112,17 @@ public class Grid
 		}
 	}
 
+	public void moveAll()
+	{
+		for (Box[] row : boxes)
+		{
+			for (Box b : row)
+			{
+				ArrayList<Sprite> spr = b.getBoxSprites().getSpriteList();
+			}
+		}
+	}
+
 	//---------------------------------------<BOX & BOX IMAGE EDITING>-----------------------------------------
 
 	public void setImages(BufferedImage b)
@@ -158,4 +170,10 @@ public class Grid
 
 	public Box[][] getBoxArray()
 	{return boxes;}
+	
+	public int getRows()
+	{return rows;}
+	
+	public int getCols()
+	{return cols;}
 }

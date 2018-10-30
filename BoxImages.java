@@ -11,11 +11,6 @@ public class BoxImages
     //GLOBAL VARIABLES
     private ArrayList<BufferedImage> imgs = new ArrayList<BufferedImage>();
 
-    //---------------------------------------------------<CONSTRUCTORS>-----------------------------------------
-    public BoxImages()
-    {
-    }
-
     //-----------------------------------------------------<DRAWING>---------------------------------------------
     public void draw(Graphics g, int x, int y, int width, int height)
     {

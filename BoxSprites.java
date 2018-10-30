@@ -15,15 +15,34 @@ public class BoxSprites
         b = bx;
 	}
 
-    public void draw(Graphics g, int width, int height)
+	//Update method calls draw and moveRobots.
+	//Those methods are no longer callable from the outside.
+	public void update(Graphics g)
+	{
+		draw(g);
+		moveRobots();
+	}
+
+    private void draw(Graphics g)
     {
         for (Sprite s : sprs)
         {
 			s.setX(b.getX());
 			s.setY(b.getY());
-            s.draw(g, width, height);
+            s.draw(g, b.getWidth(), b.getHeight());
 		}
     }
+
+    private void moveRobots()
+    {
+		for (Sprite r : sprs)
+		{
+			if (r instanceof RandomRobot)
+			{
+				r.move();
+			}
+		}
+	}
 
 	//-------------------------------------------<SETTERS>----------------------------------------------
     public void setSpriteX(int x, int index)
@@ -67,4 +86,7 @@ public class BoxSprites
 			return sprs.get(0);
 		return null;
 	}
+
+	public ArrayList<Sprite> getSpriteList()
+	{return sprs;}
 }

@@ -43,7 +43,7 @@ public class Box
 			g.setColor(Color.WHITE);
 			g.fillRect(x + 2, y + 2, width - 4, height - 4);
 			bi.draw(g, x, y, width, height);
-			bs.draw(g, width, height);
+			bs.update(g);
 		}
 		else
 		{
