@@ -16,66 +16,78 @@ public class GriddedSprite extends Sprite
 		this.row = row;
 		this.col = col;
     }
-   
+
     //----------------------------------------------<MOVEMENT>-----------------------------------------------
     public void moveUp()
     {
-		Box[][] boxes = gr.getBoxArray();
-		
-		if (!boxes[row - 1][col].isNull())
+		Box nextBox = gr.getBoxArray()[row - 1][col];
+
+		if (!nextBox.isNull())
 		{
-			boxes[row][col].removeSprite(super.getName());
-			boxes[row--][col].addSprite(this);
+			gr.totalDelete(getName());
+			if (!nextBox.getType().equalsIgnoreCase("END"))
+				nextBox.addSprite(this);
+
+			row--;
 		}
 	}
-	
+
 	public void moveRight()
 	{
-		Box[][] boxes = gr.getBoxArray();
-		
-		if (!boxes[row][col + 1].isNull())
+		Box nextBox = gr.getBoxArray()[row][col + 1];
+
+		if (!nextBox.isNull())
 		{
-			boxes[row][col].removeSprite(super.getName());
-			boxes[row][col++].addSprite(this);
+			gr.totalDelete(getName());
+			if (!nextBox.getType().equalsIgnoreCase("END"))
+				nextBox.addSprite(this);
+
+			col++;
 		}
 	}
-	
+
 	public void moveLeft()
 	{
-		Box[][] boxes = gr.getBoxArray();
-		
-		if (!boxes[row][col - 1].isNull())
+		Box nextBox = gr.getBoxArray()[row][col - 1];
+
+		if (!nextBox.isNull())
 		{
-			boxes[row][col].removeSprite(super.getName());
-			boxes[row][col--].addSprite(this);
+			gr.totalDelete(getName());
+			if (!nextBox.getType().equalsIgnoreCase("END"))
+				nextBox.addSprite(this);
+
+			col--;
 		}
 	}
-	
+
 	public void moveDown()
 	{
-		Box[][] boxes = gr.getBoxArray();
-		
-		if (!boxes[row + 1][col].isNull())
+		Box nextBox = gr.getBoxArray()[row + 1][col];
+
+		if (!nextBox.isNull())
 		{
-			boxes[row][col].removeSprite(super.getName());
-			boxes[row++][col].addSprite(this);
+			gr.totalDelete(getName());
+			if (!nextBox.getType().equalsIgnoreCase("END"))
+				nextBox.addSprite(this);
+
+			row++;
 		}
 	}
-    
+
     //------------------------------------------------------<GETTERS>----------------------------------------
     public int getRow()
     {return row;}
-    
+
     public int getCol()
     {return col;}
-    
+
     public Grid getGrid()
     {return gr;}
-    
+
     //----------------------------------------------------<SETTERS>--------------------------------------------
     public void setRow(int r)
     {row = r;}
-    
+
     public void setCol(int c)
     {
 		if (c > 0 && c < gr.getCols())

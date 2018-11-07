@@ -4,19 +4,19 @@
 
 import java.util.Random;
 
-public class RandomRobot extends Robot
+public class RandomRobot extends Roboto
 {
 	private Random r = new Random();
-	
+
 	public RandomRobot(String name, Spritesheet ss, Grid g, int row, int col)
 	{
 		super (name, ss, g, row, col);
 	}
-	
+
 	public void move()
 	{
 		int direction = r.nextInt(4);
-		
+
 		switch (direction)
 		{
 			case 0:
@@ -35,6 +35,6 @@ public class RandomRobot extends Robot
 				super.setDirection("LEFT");
 				super.moveLeft();
 		}
-		
+
 	}
 }

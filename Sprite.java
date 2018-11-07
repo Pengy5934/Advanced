@@ -84,4 +84,7 @@ public class Sprite
 
     public void setY(int y)
     {this.y = y;}
+
+    public String toString()
+    {return name + "\n" + x + ", " + y;}
 }

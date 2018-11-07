@@ -6,28 +6,18 @@ import java.awt.*;
 
 public class StartPoint extends Box
 {
-	public StartPoint(int x, int y, int width, int height, int row, int col)
+	public StartPoint(int x, int y, int width, int height)
 	{
-		super (x, y, width, height, row, col);
+		super (x, y, width, height);
 	}
-
-	public void update(Graphics g, Grid gr, Sprite s)
+	
+	public void draw(Graphics g)
 	{
-		drawn(g);
-		action(gr, s);
-	}
-
-	private void drawn(Graphics g)
-	{
-		super.draw(g);
 		Color temp = g.getColor();
 		g.setColor(Color.YELLOW);
 		g.fillRect(getX(), getY(), getWidth(), getHeight());
 		g.setColor(temp);
+		super.draw(g);
 	}
 
-	private void action(Grid gr, Sprite s)
-	{
-		gr.getBoxArray()[getRow()][getCol()].addSprite(s);
-	}
 }

@@ -13,24 +13,30 @@ public class Box
 	private int row, col;
     private int x, y;
     private int width, height;
+    private String type = "NORMAL";
 
     //Deactivation: Allows a box to be deactivated in a maze
     private boolean isNull = false;
     private BufferedImage nullImage = null;
 
     //-----------------------------------------------<CONSTRUCTORS>-----------------------------------------
-	public Box(int x, int y, int width, int height, int row, int col)
+	public Box(int x, int y, int width, int height)
 	{
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
-        this.row = row;
-        this.col = col;
+        this.row = y / height;
+        this.col = x / width;
         isNull = false;
 
         bi = new BoxImages();
         bs = new BoxSprites(this);
+	}
+
+	public void update(Graphics g)
+	{
+		draw(g);
 	}
 
     //-------------------------------------------------<DRAWING>-------------------------------------
@@ -43,7 +49,7 @@ public class Box
 			g.setColor(Color.WHITE);
 			g.fillRect(x + 2, y + 2, width - 4, height - 4);
 			bi.draw(g, x, y, width, height);
-			bs.update(g);
+			bs.draw(g);
 		}
 		else
 		{
@@ -55,6 +61,11 @@ public class Box
 			else
 				g.drawImage(nullImage, x, y, width, height, null);
 		}
+	}
+
+	public void moveRobots()
+	{
+		bs.moveRobots();
 	}
 
 	public boolean hasSprite(String name)
@@ -75,10 +86,19 @@ public class Box
     {bs.removeSprite(name);}
     //-------------------------------------------------<SETTERS>-------------------------------------
 	public void setNull(boolean n)
-	{isNull = n;}
+	{isNull = n; type = "NULL";}
 
 	public void setNullImage(BufferedImage b)
 	{nullImage = b;}
+
+	public void setType(String s)
+	{type = s;}
+
+	public void setBoxImages(BoxImages bi)
+	{this.bi = bi;}
+
+	public void setBoxSprites(BoxSprites bs)
+	{this.bs = bs;}
 
     //-------------------------------------------------<GETTERS>-------------------------------------
     public int getX()
@@ -116,4 +136,10 @@ public class Box
 
     public BufferedImage getNullImage()
     {return nullImage;}
+
+    public String getType()
+    {return type;}
+
+    public String toString()
+    {return "Box at: " + row + ", " + col;}
 }

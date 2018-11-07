@@ -15,15 +15,7 @@ public class BoxSprites
         b = bx;
 	}
 
-	//Update method calls draw and moveRobots.
-	//Those methods are no longer callable from the outside.
-	public void update(Graphics g)
-	{
-		draw(g);
-		moveRobots();
-	}
-
-    private void draw(Graphics g)
+    public void draw(Graphics g)
     {
         for (Sprite s : sprs)
         {
@@ -33,15 +25,34 @@ public class BoxSprites
 		}
     }
 
-    private void moveRobots()
+    public void moveRight(String spriteName)
     {
+		Sprite s = sprs.get(findSprite(spriteName));
+		if (s instanceof GriddedSprite)
+		{
+			GriddedSprite gs = (GriddedSprite) s;
+			gs.moveRight();
+		}
+	}
+
+    public void moveRobots()
+    {
+		ArrayList<Roboto> bots = new ArrayList<Roboto>();
+
 		for (Sprite r : sprs)
 		{
 			if (r instanceof RandomRobot)
 			{
-				r.move();
+				bots.add((RandomRobot)r);
+			}
+			if (r instanceof RightRobot)
+			{
+				bots.add((RightRobot)r);
 			}
 		}
+
+		for (Roboto r : bots)
+			r.move();
 	}
 
 	//-------------------------------------------<SETTERS>----------------------------------------------

@@ -2,104 +2,222 @@
 //RightRobot
 //10.29.2018
 
-public class RightRobot extends Robot
+public class RightRobot extends Roboto
 {
 	public RightRobot(String name, Spritesheet ss, Grid g, int row, int col)
 	{
 		super (name, ss, g, row, col);
 	}
-	
+
+	public RightRobot(String name, Spritesheet ss, Grid g, StartPoint sp)
+	{
+		super (name, ss, g, sp.getRow(), sp.getCol());
+	}
+
 	public void move()
 	{
-		Box[][] boxes = super.getGrid().getBoxArray();
-		int row = super.getRow();
-		int col = super.getCol();
-		
-		switch (super.getDirection())
+		/*if (getDirection().equalsIgnoreCase("UP"))
+		{
+			if (!moveRobotRight())
+				if (!moveRobotUp())
+					if (!moveRobotLeft())
+					{
+						boolean b = moveRobotDown();
+					}
+		}
+		else if (getDirection().equalsIgnoreCase("RIGHT"))
+		{
+			if (!moveRobotDown())
+				if (!moveRobotRight())
+					if (!moveRobotUp())
+					{
+						boolean b = moveRobotLeft();
+					}
+		}
+		else if (getDirection().equalsIgnoreCase("DOWN"))
+		{
+			if (!moveRobotLeft())
+				if (!moveRobotDown())
+					if (!moveRobotRight())
+					{
+						boolean b = moveRobotUp();
+					}
+		}
+		else if (getDirection().equalsIgnoreCase("LEFT"))
+		{
+			if (!moveRobotUp())
+				if (!moveRobotLeft())
+					if (!moveRobotDown())
+					{
+						boolean b = moveRobotRight();
+					}
+		}*/
+
+		System.out.print(getDirection());
+		switch (getDirection())
 		{
 			case "UP":
-				if (!boxes[row][col + 1].isNull())
+				if (!getRightBox().isNull())
 				{
-					super.moveRight();
+					moveRight();
 					setDirection("RIGHT");
 				}
-				else if (!boxes[row - 1][col].isNull())
+				else if (!getUpBox().isNull())
 				{
-					super.moveUp();
+					System.out.println("UP IS FREE");
+					moveUp();
 				}
-				else if (!boxes[row][col - 1].isNull())
+				else if (!getLeftBox().isNull())
 				{
-					super.moveLeft();
+					moveLeft();
 					setDirection("LEFT");
 				}
-				else
+				else if (!getDownBox().isNull())
 				{
-					super.moveDown();
+					moveDown();
 					setDirection("DOWN");
 				}
+				System.out.println(" to " + getDirection());
 				break;
 			case "RIGHT":
-				if (!boxes[row + 1][col].isNull())
+				if (!getDownBox().isNull())
 				{
-					super.moveDown();
+					moveDown();
 					setDirection("DOWN");
 				}
-				else if (!boxes[row][col + 1].isNull())
+				else if (!getRightBox().isNull())
 				{
-					super.moveRight();
+					moveRight();
 				}
-				else if (!boxes[row - 1][col].isNull())
+				else if (!getUpBox().isNull())
 				{
-					super.moveUp();
+					moveUp();
 					setDirection("UP");
 				}
-				else
+				else if (!getLeftBox().isNull())
 				{
-					super.moveLeft();
+					moveLeft();
 					setDirection("LEFT");
 				}
+				System.out.println(" to " + getDirection());
 				break;
 			case "DOWN":
-				if (!boxes[row][col - 1].isNull())
+				if (!getLeftBox().isNull())
 				{
-					super.moveLeft();
+					moveLeft();
 					setDirection("LEFT");
 				}
-				else if (!boxes[row + 1][col].isNull())
+				else if (!getDownBox().isNull())
 				{
-					super.moveDown();
+					moveDown();
 				}
-				else if (!boxes[row][col + 1].isNull())
+				else if (!getRightBox().isNull())
 				{
-					super.moveRight();
+					moveRight();
 					setDirection("RIGHT");
 				}
-				else
+				else if (!getUpBox().isNull())
 				{
-					super.moveUp();
+					moveUp();
 					setDirection("Up");
 				}
+				System.out.println(" to " + getDirection());
 				break;
 			case "LEFT":
-				if (!boxes[row + 1][col].isNull())
+				if (!getUpBox().isNull())
 				{
-					super.moveDown();
+					moveUp();
+					setDirection("Up");
+				}
+				else if (!getLeftBox().isNull())
+				{
+					moveLeft();
+				}
+				else if (!getDownBox().isNull())
+				{
+					moveDown();
 					setDirection("DOWN");
 				}
-				else if (!boxes[row][col + 1].isNull())
+				else if (!getRightBox().isNull())
 				{
-					super.moveRight();
+					moveRight();
+					setDirection("RIGHT");
 				}
-				else if (!boxes[row - 1][col].isNull())
-				{
-					super.moveUp();
-					setDirection("UP");
-				}
-				else
-				{
-					super.moveDown();
-					setDirection("LEFT");
-				}
+				System.out.println(" to " + getDirection());
 		}
 	}
+
+	public boolean moveRobotLeft()
+	{
+		Box before = getGrid().getBoxArray()[getRow()][getCol()];
+		moveLeft();
+		Box after = getGrid().getBoxArray()[getRow()][getCol()];
+		if (before.equals(after))
+			return false;
+		setDirection("LEFT");
+		return true;
+	}
+
+	public Box getLeftBox()
+	{
+		Box[][] boxes = getGrid().getBoxArray();
+		return boxes[getRow()][getCol() - 1];
+	}
+
+	public boolean moveRobotRight()
+	{
+		Box before = getGrid().getBoxArray()[getRow()][getCol()];
+		moveRight();
+		Box after = getGrid().getBoxArray()[getRow()][getCol()];
+		if (before.equals(after))
+			return false;
+		setDirection("RIGHT");
+		return true;
+	}
+
+	public Box getRightBox()
+	{
+		Box[][] boxes = getGrid().getBoxArray();
+		return boxes[getRow()][getCol() + 1];
+	}
+
+	public boolean moveRobotUp()
+	{
+		Box before = getGrid().getBoxArray()[getRow()][getCol()];
+		moveUp();
+		Box after = getGrid().getBoxArray()[getRow()][getCol()];
+		if (before.equals(after))
+			return false;
+		setDirection("UP");
+		return true;
+	}
+
+	public Box getUpBox()
+	{
+		Box[][] boxes = getGrid().getBoxArray();
+		return boxes[getRow() - 1][getCol()];
+	}
+
+	public boolean moveRobotDown()
+	{
+		Box before = getGrid().getBoxArray()[getRow()][getCol()];
+		moveDown();
+		Box after = getGrid().getBoxArray()[getRow()][getCol()];
+		if (before.equals(after))
+			return false;
+		setDirection("DOWN");
+		return true;
+	}
+
+	public Box getDownBox()
+	{
+		Box[][] boxes = getGrid().getBoxArray();
+		return boxes[getRow() + 1][getCol()];
+	}
+
+	public int getRow()
+	{return super.getRow();}
+
+	public int getCol()
+	{return super.getCol();}
 }

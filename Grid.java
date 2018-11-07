@@ -12,7 +12,6 @@ public class Grid
 	//GLOBAL VARIABLES
 	private Box[][] boxes;
 	private int screenWidth, screenHeight;
-	private int boxWidth, boxHeight;
 	private int rows, cols;
 
 	//----------------------------------------------<CONSTRUCTORS>----------------------------------------
@@ -24,12 +23,12 @@ public class Grid
 		screenWidth = frameWidth;
 		screenHeight = frameHeight;
 
-		boxWidth = screenWidth / cols;
-		boxHeight = screenHeight / rows;
+		int boxWidth = screenWidth / cols;
+		int boxHeight = screenHeight / rows;
 
 		for (int i = 0; i < rows; i++)
 			for (int j = 0; j < cols; j++)
-				boxes[i][j] = new Box(j * boxWidth, i * boxHeight, boxWidth, boxHeight, i, j);
+				boxes[i][j] = new Box(j * boxWidth, i * boxHeight, boxWidth, boxHeight);
 	}
 
 	public void draw(Graphics g)
@@ -44,16 +43,19 @@ public class Grid
 	{
 		int[] coords = findSpriteBox(spriteName);
 
-		int row = coords[0];
-		int col = coords[1];
-
-		if (coords != null && !boxes[row][col + 1].isNull())
+		if (coords != null)
 		{
-			if (col > 0 && col < boxes[row].length)
+			int row = coords[0];
+			int col = coords[1];
+
+			Box b = boxes[row][col];
+
+			Sprite s = b.getSprite(spriteName);
+
+			if (s instanceof GriddedSprite)
 			{
-				Sprite s = boxes[row][col].getSprite(spriteName);
-				boxes[row][col].removeSprite(s.getName());
-				boxes[row][col + 1].addSprite(s);
+				GriddedSprite gs = (GriddedSprite) s;
+				gs.moveRight();
 			}
 		}
 	}
@@ -62,16 +64,19 @@ public class Grid
 	{
 		int[] coords = findSpriteBox(spriteName);
 
-		int row = coords[0];
-		int col = coords[1];
-
-		if (coords != null && !boxes[row][col - 1].isNull())
+		if (coords != null)
 		{
-			if (col > 0 && col < boxes[row].length)
+			int row = coords[0];
+			int col = coords[1];
+
+			Box b = boxes[row][col];
+
+			Sprite s = b.getSprite(spriteName);
+
+			if (s instanceof GriddedSprite)
 			{
-				Sprite s = boxes[row][col].getSprite(spriteName);
-				boxes[row][col].removeSprite(s.getName());
-				boxes[row][col - 1].addSprite(s);
+				GriddedSprite gs = (GriddedSprite) s;
+				gs.moveLeft();
 			}
 		}
 	}
@@ -80,16 +85,19 @@ public class Grid
 	{
 		int[] coords = findSpriteBox(spriteName);
 
-		int row = coords[0];
-		int col = coords[1];
-
-		if (coords != null && !boxes[row - 1][col].isNull())
+		if (coords != null)
 		{
-			if (row > 0 && row < boxes.length)
+			int row = coords[0];
+			int col = coords[1];
+
+			Box b = boxes[row][col];
+
+			Sprite s = b.getSprite(spriteName);
+
+			if (s instanceof GriddedSprite)
 			{
-				Sprite s = boxes[row][col].getSprite(spriteName);
-				boxes[row][col].removeSprite(s.getName());
-				boxes[row - 1][col].addSprite(s);
+				GriddedSprite gs = (GriddedSprite) s;
+				gs.moveUp();
 			}
 		}
 	}
@@ -98,16 +106,19 @@ public class Grid
 	{
 		int[] coords = findSpriteBox(spriteName);
 
-		int row = coords[0];
-		int col = coords[1];
-
-		if (coords != null && !boxes[row + 1][col].isNull())
+		if (coords != null)
 		{
-			if (row > 0 && row < boxes.length)
+			int row = coords[0];
+			int col = coords[1];
+
+			Box b = boxes[row][col];
+
+			Sprite s = b.getSprite(spriteName);
+
+			if (s instanceof GriddedSprite)
 			{
-				Sprite s = boxes[row][col].getSprite(spriteName);
-				boxes[row][col].removeSprite(s.getName());
-				boxes[row + 1][col].addSprite(s);
+				GriddedSprite gs = (GriddedSprite) s;
+				gs.moveDown();
 			}
 		}
 	}
@@ -124,6 +135,10 @@ public class Grid
 	}
 
 	//---------------------------------------<BOX & BOX IMAGE EDITING>-----------------------------------------
+	public void setBox(Box b, int row, int col)
+	{
+		boxes[row][col] = b;
+	}
 
 	public void setImages(BufferedImage b)
 	{
@@ -164,16 +179,49 @@ public class Grid
 		boxes[row][col].addSprite(s);
 	}
 
+	public void totalDelete(String spriteName)
+	{
+		for (Box[] row : boxes)
+			for (Box b : row)
+				if (b.hasSprite(spriteName))
+					b.removeSprite(spriteName);
+	}
+
+	public void resize(int width, int height)
+	{
+		Box[][] newBoxes = new Box[rows][cols];
+		if (cols != 0 && rows != 0)
+		{
+			int xInterval = width / cols;
+			int yInterval = height / rows;
+
+			for (int i = 0; i < rows; i++)
+				for (int j = 0; j < cols; j++)
+				{
+					newBoxes[i][j] = new Box(j * xInterval, i * yInterval, xInterval, yInterval);
+					newBoxes[i][j].setBoxImages(boxes[i][j].getBoxImages());
+					newBoxes[i][j].setBoxSprites(boxes[i][j].getBoxSprites());
+				}
+			boxes = newBoxes;
+		}
+	}
+
 	//-----------------------------------------------------<GETTERS>---------------------------------------
 	public Box getBox(int row, int col)
 	{return boxes[row][col];}
 
 	public Box[][] getBoxArray()
 	{return boxes;}
-	
+
 	public int getRows()
-	{return rows;}
-	
+	{return boxes.length;}
+
 	public int getCols()
-	{return cols;}
+	{return boxes[0].length;}
+
+	public int getWidth()
+	{return cols * boxes[0][0].getWidth();}
+
+	public int getHeight()
+	{return rows * boxes[0][0].getHeight();}
 }

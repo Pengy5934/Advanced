@@ -61,33 +61,46 @@ public class MazeReader
 
 	public static int[][] getIntMap(File f, int rows, int cols)
 	{
-		int[][] intMap = new int[rows][cols];
+		int[][] intMap = new int[0][0];
 
-		try {
-			FileReader fr = new FileReader(f);
-			scan = new Scanner(fr);
-			scan.useDelimiter(",");
+		try
+		{
+			reader = new FileReader(f);
+			scan = new Scanner(reader);
 
-			for (int i = 0; i < rows; i++)
-				for (int j = 0; j < cols; j++)
+			ArrayList<String> linesWithCommas = new ArrayList<String>();
+			ArrayList<String> digits = new ArrayList<String>();
+
+			while (scan.hasNext())
+			{
+				String str = scan.next();
+				linesWithCommas.add(str);
+			}
+
+			for (String s : linesWithCommas)
+			{
+				scan = new Scanner(s);
+				scan.useDelimiter(",");
+
+				while (scan.hasNext())
 				{
-					String s = scan.next();
-					switch(s)
-					{
-						case "0":
-							intMap[i][j] = 0;
-						case "1":
-							intMap[i][j] = 1;
-							break;
-						case "2":
-							intMap[i][j] = 2;
-							break;
-						case "3":
-							intMap[i][j] = 3;
-					}
+					String digit = scan.next();
+					digits.add(digit);
 				}
+			}
+
+			intMap = new int[linesWithCommas.size()][digits.size() / linesWithCommas.size()];
+			int index = 0;
+
+			for (int i = 0; i < intMap.length; i++)
+			{
+				for (int j = 0; j < intMap[0].length; j++)
+				{
+					intMap[i][j] = Integer.parseInt(digits.get(index++));
+				}
+			}
 		}
-		catch(Exception ex)
+		catch (Exception ex)
 		{ex.printStackTrace();}
 
 		return intMap;
